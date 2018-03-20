@@ -122,3 +122,8 @@ jhipster:
 # ===================================================================
 
 application:
+
+logging:
+  level:
+    org.trinakria.rfbloyalty.service: debug
+    org.trinakria.rfbloyalty.aop.logging: error
