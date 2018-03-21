@@ -1,10 +1,8 @@
 package org.trinakria.rfbloyalty.config;
 
-import org.trinakria.rfbloyalty.security.*;
-
 import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.security.*;
-
+import io.github.jhipster.security.AjaxAuthenticationSuccessHandler;
+import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +22,8 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CorsFilter;
+import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
+import org.trinakria.rfbloyalty.security.RfbAjaxAuthenticationFailureHandler;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 import javax.annotation.PostConstruct;
@@ -73,8 +73,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
-        return new AjaxAuthenticationFailureHandler();
+    public RfbAjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+        return new RfbAjaxAuthenticationFailureHandler();
     }
 
     @Bean

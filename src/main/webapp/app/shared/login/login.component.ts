@@ -1,10 +1,10 @@
-import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
-import { JhiEventManager } from 'ng-jhipster';
+import {AfterViewInit, Component, ElementRef, Renderer} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Router} from '@angular/router';
+import {JhiEventManager} from 'ng-jhipster';
 
-import { LoginService } from './login.service';
-import { StateStorageService } from '../auth/state-storage.service';
+import {LoginService} from './login.service';
+import {StateStorageService} from '../auth/state-storage.service';
 
 @Component({
     selector: 'jhi-login-modal',
@@ -16,6 +16,7 @@ export class JhiLoginModalComponent implements AfterViewInit {
     rememberMe: boolean;
     username: string;
     credentials: any;
+    authenticationErrorMessage: string;
 
     constructor(
         private eventManager: JhiEventManager,
@@ -68,8 +69,9 @@ export class JhiLoginModalComponent implements AfterViewInit {
                 this.stateStorageService.storeUrl(null);
                 this.router.navigate([redirect]);
             }
-        }).catch(() => {
+        }).catch((error) => {
             this.authenticationError = true;
+            this.authenticationErrorMessage = JSON.parse(error._body).message;
         });
     }
 
