@@ -1,13 +1,5 @@
 package org.trinakria.rfbloyalty.service;
 
-import org.trinakria.rfbloyalty.RfbloyaltyApp;
-import org.trinakria.rfbloyalty.domain.Authority;
-import org.trinakria.rfbloyalty.domain.User;
-import org.trinakria.rfbloyalty.repository.AuthorityRepository;
-import org.trinakria.rfbloyalty.repository.UserRepository;
-import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
-import org.trinakria.rfbloyalty.service.MailService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +13,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.trinakria.rfbloyalty.RfbloyaltyApp;
+import org.trinakria.rfbloyalty.domain.Authority;
+import org.trinakria.rfbloyalty.domain.User;
+import org.trinakria.rfbloyalty.repository.AuthorityRepository;
+import org.trinakria.rfbloyalty.repository.UserRepository;
+import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
 
 import java.util.Optional;
 
@@ -190,7 +188,7 @@ public class SocialServiceIntTest {
         User user = userRepository.findOneByEmailIgnoreCase("mail@mail.com").get();
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
-        Authority userAuthority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Authority userAuthority = authorityRepository.findOne(AuthoritiesConstants.RUNNER);
         assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
 
         // Teardown

@@ -1,22 +1,6 @@
 package org.trinakria.rfbloyalty.web.rest;
 
-import org.trinakria.rfbloyalty.config.Constants;
-import org.trinakria.rfbloyalty.RfbloyaltyApp;
-import org.trinakria.rfbloyalty.domain.Authority;
-import org.trinakria.rfbloyalty.domain.PersistentToken;
-import org.trinakria.rfbloyalty.domain.User;
-import org.trinakria.rfbloyalty.repository.AuthorityRepository;
-import org.trinakria.rfbloyalty.repository.PersistentTokenRepository;
-import org.trinakria.rfbloyalty.repository.UserRepository;
-import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
-import org.trinakria.rfbloyalty.service.MailService;
-import org.trinakria.rfbloyalty.service.dto.UserDTO;
-import org.trinakria.rfbloyalty.web.rest.errors.ExceptionTranslator;
-import org.trinakria.rfbloyalty.web.rest.vm.KeyAndPasswordVM;
-import org.trinakria.rfbloyalty.web.rest.vm.ManagedUserVM;
-import org.trinakria.rfbloyalty.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,10 +16,28 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.trinakria.rfbloyalty.RfbloyaltyApp;
+import org.trinakria.rfbloyalty.config.Constants;
+import org.trinakria.rfbloyalty.domain.Authority;
+import org.trinakria.rfbloyalty.domain.PersistentToken;
+import org.trinakria.rfbloyalty.domain.User;
+import org.trinakria.rfbloyalty.repository.AuthorityRepository;
+import org.trinakria.rfbloyalty.repository.PersistentTokenRepository;
+import org.trinakria.rfbloyalty.repository.UserRepository;
+import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
+import org.trinakria.rfbloyalty.service.MailService;
+import org.trinakria.rfbloyalty.service.UserService;
+import org.trinakria.rfbloyalty.service.dto.UserDTO;
+import org.trinakria.rfbloyalty.web.rest.errors.ExceptionTranslator;
+import org.trinakria.rfbloyalty.web.rest.vm.KeyAndPasswordVM;
+import org.trinakria.rfbloyalty.web.rest.vm.ManagedUserVM;
+
 import java.time.Instant;
 import java.time.LocalDate;
-
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -174,7 +176,7 @@ public class AccountResourceIntTest {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
         assertThat(userRepository.findOneByLogin("joe").isPresent()).isFalse();
 
         restMvc.perform(
@@ -198,7 +200,7 @@ public class AccountResourceIntTest {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -222,7 +224,7 @@ public class AccountResourceIntTest {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -246,7 +248,7 @@ public class AccountResourceIntTest {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -270,7 +272,7 @@ public class AccountResourceIntTest {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         restUserMockMvc.perform(
             post("/api/register")
@@ -295,7 +297,7 @@ public class AccountResourceIntTest {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         // Duplicate login, different email
         ManagedUserVM duplicatedUser = new ManagedUserVM();
@@ -344,7 +346,7 @@ public class AccountResourceIntTest {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         // Duplicate email, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM();
@@ -415,7 +417,7 @@ public class AccountResourceIntTest {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.RUNNER));
 
         restMvc.perform(
             post("/api/register")
@@ -426,7 +428,7 @@ public class AccountResourceIntTest {
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
-            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));
+            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.RUNNER));
     }
 
     @Test
