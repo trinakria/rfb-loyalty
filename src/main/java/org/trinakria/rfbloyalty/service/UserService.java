@@ -1,17 +1,5 @@
 package org.trinakria.rfbloyalty.service;
 
-import org.trinakria.rfbloyalty.config.CacheConfiguration;
-import org.trinakria.rfbloyalty.domain.Authority;
-import org.trinakria.rfbloyalty.domain.User;
-import org.trinakria.rfbloyalty.repository.AuthorityRepository;
-import org.trinakria.rfbloyalty.repository.PersistentTokenRepository;
-import org.trinakria.rfbloyalty.config.Constants;
-import org.trinakria.rfbloyalty.repository.UserRepository;
-import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
-import org.trinakria.rfbloyalty.security.SecurityUtils;
-import org.trinakria.rfbloyalty.service.util.RandomUtil;
-import org.trinakria.rfbloyalty.service.dto.UserDTO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -21,11 +9,24 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.trinakria.rfbloyalty.config.Constants;
+import org.trinakria.rfbloyalty.domain.Authority;
+import org.trinakria.rfbloyalty.domain.User;
+import org.trinakria.rfbloyalty.repository.AuthorityRepository;
+import org.trinakria.rfbloyalty.repository.PersistentTokenRepository;
+import org.trinakria.rfbloyalty.repository.UserRepository;
+import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
+import org.trinakria.rfbloyalty.security.SecurityUtils;
+import org.trinakria.rfbloyalty.service.dto.UserDTO;
+import org.trinakria.rfbloyalty.service.util.RandomUtil;
 
-import java.time.LocalDate;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -102,7 +103,7 @@ public class UserService {
     public User registerUser(UserDTO userDTO, String password) {
 
         User newUser = new User();
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Authority authority = authorityRepository.findOne(AuthoritiesConstants.RUNNER);
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());

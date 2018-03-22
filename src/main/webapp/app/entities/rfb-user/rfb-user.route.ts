@@ -11,16 +11,16 @@ export const rfbUserRoute: Routes = [
         path: 'rfb-user',
         component: RfbUserComponent,
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'RfbUsers'
+            authorities: ['ROLE_ADMIN'],
+            pageTitle: 'Runners'
         },
         canActivate: [UserRouteAccessService]
     }, {
         path: 'rfb-user/:id',
         component: RfbUserDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'RfbUsers'
+            authorities: ['ROLE_ADMIN'],
+            pageTitle: 'Runners'
         },
         canActivate: [UserRouteAccessService]
     }
@@ -31,8 +31,8 @@ export const rfbUserPopupRoute: Routes = [
         path: 'rfb-user-new',
         component: RfbUserPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'RfbUsers'
+            authorities: ['ROLE_ADMIN'],
+            pageTitle: 'Runners'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -41,8 +41,8 @@ export const rfbUserPopupRoute: Routes = [
         path: 'rfb-user/:id/edit',
         component: RfbUserPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'RfbUsers'
+            authorities: ['ROLE_ADMIN'],
+            pageTitle: 'Runners'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
@@ -51,8 +51,8 @@ export const rfbUserPopupRoute: Routes = [
         path: 'rfb-user/:id/delete',
         component: RfbUserDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'RfbUsers'
+            authorities: ['ROLE_ADMIN'],
+            pageTitle: 'Runners'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'

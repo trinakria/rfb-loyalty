@@ -1,11 +1,5 @@
 package org.trinakria.rfbloyalty.service;
 
-import org.trinakria.rfbloyalty.domain.Authority;
-import org.trinakria.rfbloyalty.domain.User;
-import org.trinakria.rfbloyalty.repository.AuthorityRepository;
-import org.trinakria.rfbloyalty.repository.UserRepository;
-import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +10,11 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
+import org.trinakria.rfbloyalty.domain.Authority;
+import org.trinakria.rfbloyalty.domain.User;
+import org.trinakria.rfbloyalty.repository.AuthorityRepository;
+import org.trinakria.rfbloyalty.repository.UserRepository;
+import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -95,7 +94,7 @@ public class SocialService {
         String login = getLoginDependingOnProviderId(userProfile, providerId);
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<Authority> authorities = new HashSet<>(1);
-        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER));
+        authorities.add(authorityRepository.findOne(AuthoritiesConstants.RUNNER));
 
         User newUser = new User();
         newUser.setLogin(login);
