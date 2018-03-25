@@ -8,16 +8,15 @@ import org.trinakria.rfbloyalty.service.dto.RfbEventDTO;
 /**
  * Mapper for the entity RfbEvent and its DTO RfbEventDTO.
  */
-@Mapper(componentModel = "spring", uses = {RfbLocationMapper.class})
-public interface RfbEventMapper extends EntityMapper<RfbEventDTO, RfbEvent> {
+@Mapper(componentModel = "spring", uses = {RfbLocationMapper.class, })
+public interface RfbEventMapper extends EntityMapper <RfbEventDTO, RfbEvent> {
 
-    @Mapping(source = "rfbLocation.id", target = "rfbLocationId")
+    @Mapping(source = "rfbLocation", target = "rfbLocationDTO")
     RfbEventDTO toDto(RfbEvent rfbEvent);
 
-    @Mapping(source = "rfbLocationId", target = "rfbLocation")
+    @Mapping(source = "rfbLocationDTO", target = "rfbLocation")
     @Mapping(target = "rfbEventAttendances", ignore = true)
     RfbEvent toEntity(RfbEventDTO rfbEventDTO);
-
     default RfbEvent fromId(Long id) {
         if (id == null) {
             return null;
