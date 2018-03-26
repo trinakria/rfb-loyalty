@@ -1,17 +1,21 @@
 package org.trinakria.rfbloyalty.service.mapper;
 
+import com.google.common.collect.ImmutableSet;
+import org.springframework.stereotype.Service;
 import org.trinakria.rfbloyalty.domain.Authority;
 import org.trinakria.rfbloyalty.domain.User;
 import org.trinakria.rfbloyalty.service.dto.UserDTO;
 
-import org.springframework.stereotype.Service;
-
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 /**
  * Mapper for the entity User and its DTO called UserDTO.
- *
+ * <p>
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
  */
@@ -19,7 +23,11 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user);
+        if (user != null) {
+            return new UserDTO(user);
+        } else {
+            return null;
+        }
     }
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
@@ -67,10 +75,14 @@ public class UserMapper {
     }
 
     public Set<Authority> authoritiesFromStrings(Set<String> strings) {
-        return strings.stream().map(string -> {
-            Authority auth = new Authority();
-            auth.setName(string);
-            return auth;
-        }).collect(Collectors.toSet());
+        if (!isEmpty(strings)) {
+            return strings.stream().map(string -> {
+                Authority auth = new Authority();
+                auth.setName(string);
+                return auth;
+            }).collect(Collectors.toSet());
+        } else {
+            return ImmutableSet.of();
+        }
     }
 }
