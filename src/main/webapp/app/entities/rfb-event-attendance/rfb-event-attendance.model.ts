@@ -1,5 +1,4 @@
-import {BaseEntity} from './../../shared';
-import {RfbUser} from '../rfb-user';
+import {BaseEntity, User} from './../../shared';
 import {RfbEvent} from '../rfb-event';
 
 export class RfbEventAttendance implements BaseEntity {
@@ -7,7 +6,7 @@ export class RfbEventAttendance implements BaseEntity {
         public id?: number,
         public attendanceDate?: any,
         public rfbEventDTO?: RfbEvent,
-        public rfbUserDTO?: RfbUser,
+        public userDTO?: User,
     ) {
     }
 }

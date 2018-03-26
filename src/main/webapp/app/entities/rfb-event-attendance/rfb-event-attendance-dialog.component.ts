@@ -10,8 +10,8 @@ import {RfbEventAttendance} from './rfb-event-attendance.model';
 import {RfbEventAttendancePopupService} from './rfb-event-attendance-popup.service';
 import {RfbEventAttendanceService} from './rfb-event-attendance.service';
 import {RfbEvent, RfbEventService} from '../rfb-event';
-import {RfbUser, RfbUserService} from '../rfb-user';
-import {ResponseWrapper} from '../../shared';
+import {RfbUserService} from '../rfb-user';
+import {ResponseWrapper, User} from '../../shared';
 
 @Component({
     selector: 'jhi-rfb-event-attendance-dialog',
@@ -24,7 +24,7 @@ export class RfbEventAttendanceDialogComponent implements OnInit {
 
     rfbevents: RfbEvent[];
 
-    rfbusers: RfbUser[];
+    users: User[];
     attendanceDateDp: any;
 
     constructor(
@@ -42,7 +42,7 @@ export class RfbEventAttendanceDialogComponent implements OnInit {
         this.rfbEventService.query()
             .subscribe((res: ResponseWrapper) => { this.rfbevents = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.rfbUserService.query()
-            .subscribe((res: ResponseWrapper) => { this.rfbusers = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -83,7 +83,7 @@ export class RfbEventAttendanceDialogComponent implements OnInit {
         return item.id;
     }
 
-    trackRfbUserById(index: number, item: RfbUser) {
+    trackRfbUserById(index: number, item: User) {
         return item.id;
     }
 }
