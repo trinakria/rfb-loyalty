@@ -109,7 +109,6 @@ public class UserService {
 
         User newUser = new User();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.RUNNER);
-        RfbLocation homeLocation = rfbLocationRepository.findOne(userDTO.getHomeLocation());
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
@@ -120,7 +119,10 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        newUser.setHomeLocation(homeLocation);
+        if (userDTO.getHomeLocation() != null) {
+            RfbLocation homeLocation = rfbLocationRepository.findOne(userDTO.getHomeLocation());
+            newUser.setHomeLocation(homeLocation);
+        }
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
