@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer} from '@angular/core';
+import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 
-import { Register } from './register.service';
-import { LoginModalService, EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../shared';
+import {Register} from './register.service';
+import {EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE, LoginModalService, ResponseWrapper} from '../../shared';
+import {RfbLocation, RfbLocationService} from '../../entities/rfb-location';
 
 @Component({
     selector: 'jhi-register',
@@ -18,18 +19,23 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     registerAccount: any;
     success: boolean;
     modalRef: NgbModalRef;
+    locations: RfbLocation[];
 
     constructor(
         private loginModalService: LoginModalService,
         private registerService: Register,
         private elementRef: ElementRef,
-        private renderer: Renderer
+        private renderer: Renderer,
+        private locationService: RfbLocationService
     ) {
     }
 
     ngOnInit() {
         this.success = false;
-        this.registerAccount = {};
+        this.registerAccount = {
+            homeLocation: null
+        };
+        this.loadLocations();
     }
 
     ngAfterViewInit() {
@@ -53,6 +59,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
     openLogin() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    loadLocations() {
+        this.locations = [];
+        this.locationService.query( {
+            page: 0,
+            size: 100,
+            sort: ['locationName,runDayOfWeek', 'ASC']}).subscribe(
+            (res: ResponseWrapper) => {
+                this.locations = res.json
+            },
+            (res: ResponseWrapper) => {
+                console.log(res)
+            }
+        );
     }
 
     private processError(response) {

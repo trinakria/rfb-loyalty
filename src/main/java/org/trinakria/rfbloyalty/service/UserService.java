@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trinakria.rfbloyalty.config.Constants;
 import org.trinakria.rfbloyalty.domain.Authority;
+import org.trinakria.rfbloyalty.domain.RfbLocation;
 import org.trinakria.rfbloyalty.domain.User;
 import org.trinakria.rfbloyalty.repository.AuthorityRepository;
 import org.trinakria.rfbloyalty.repository.PersistentTokenRepository;
+import org.trinakria.rfbloyalty.repository.RfbLocationRepository;
 import org.trinakria.rfbloyalty.repository.UserRepository;
 import org.trinakria.rfbloyalty.security.AuthoritiesConstants;
 import org.trinakria.rfbloyalty.security.SecurityUtils;
@@ -50,13 +52,16 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, PersistentTokenRepository persistentTokenRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    private final RfbLocationRepository rfbLocationRepository;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, PersistentTokenRepository persistentTokenRepository, AuthorityRepository authorityRepository, CacheManager cacheManager, RfbLocationRepository rfbLocationRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.socialService = socialService;
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.rfbLocationRepository = rfbLocationRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -104,6 +109,7 @@ public class UserService {
 
         User newUser = new User();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.RUNNER);
+        RfbLocation homeLocation = rfbLocationRepository.findOne(userDTO.getHomeLocation());
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
@@ -114,6 +120,7 @@ public class UserService {
         newUser.setEmail(userDTO.getEmail());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
+        newUser.setHomeLocation(homeLocation);
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key

@@ -56,6 +56,7 @@ public class RfbBootstrap implements CommandLineRunner {
         User user = new User();
         user.setFirstName("Johnny");
         user.setLogin("johnny");
+        user.setEmail("johnny@runningforbrews.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("admin"));
         userRepository.save(user);

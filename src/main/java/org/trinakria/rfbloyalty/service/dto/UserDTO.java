@@ -1,14 +1,13 @@
 package org.trinakria.rfbloyalty.service.dto;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.trinakria.rfbloyalty.config.Constants;
-
 import org.trinakria.rfbloyalty.domain.Authority;
 import org.trinakria.rfbloyalty.domain.User;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,6 +52,8 @@ public class UserDTO {
 
     private Set<String> authorities;
 
+    private Long homeLocation;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -73,6 +74,7 @@ public class UserDTO {
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+        this.homeLocation = user.getHomeLocation() != null? user.getHomeLocation().getId() : null;
     }
 
     public Long getId() {
@@ -177,6 +179,14 @@ public class UserDTO {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public Long getHomeLocation() {
+        return homeLocation;
+    }
+
+    public void setHomeLocation(Long homeLocation) {
+        this.homeLocation = homeLocation;
     }
 
     @Override
