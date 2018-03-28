@@ -10,8 +10,7 @@ import {RfbEventAttendance} from './rfb-event-attendance.model';
 import {RfbEventAttendancePopupService} from './rfb-event-attendance-popup.service';
 import {RfbEventAttendanceService} from './rfb-event-attendance.service';
 import {RfbEvent, RfbEventService} from '../rfb-event';
-import {RfbUserService} from '../rfb-user';
-import {ResponseWrapper, User} from '../../shared';
+import {ResponseWrapper, User, UserService} from '../../shared';
 
 @Component({
     selector: 'jhi-rfb-event-attendance-dialog',
@@ -32,7 +31,7 @@ export class RfbEventAttendanceDialogComponent implements OnInit {
         private jhiAlertService: JhiAlertService,
         private rfbEventAttendanceService: RfbEventAttendanceService,
         private rfbEventService: RfbEventService,
-        private rfbUserService: RfbUserService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
@@ -41,7 +40,7 @@ export class RfbEventAttendanceDialogComponent implements OnInit {
         this.isSaving = false;
         this.rfbEventService.query()
             .subscribe((res: ResponseWrapper) => { this.rfbevents = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.rfbUserService.query()
+        this.userService.query()
             .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 

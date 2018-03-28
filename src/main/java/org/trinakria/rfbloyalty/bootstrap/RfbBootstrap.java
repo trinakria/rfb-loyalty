@@ -1,5 +1,6 @@
 package org.trinakria.rfbloyalty.bootstrap;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -8,14 +9,10 @@ import org.trinakria.rfbloyalty.domain.RfbEvent;
 import org.trinakria.rfbloyalty.domain.RfbEventAttendance;
 import org.trinakria.rfbloyalty.domain.RfbLocation;
 import org.trinakria.rfbloyalty.domain.User;
-import org.trinakria.rfbloyalty.repository.RfbEventAttendanceRepository;
-import org.trinakria.rfbloyalty.repository.RfbEventRepository;
-import org.trinakria.rfbloyalty.repository.RfbLocationRepository;
-import org.trinakria.rfbloyalty.repository.UserRepository;
+import org.trinakria.rfbloyalty.repository.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.UUID;
 
 
 /**
@@ -29,15 +26,17 @@ public class RfbBootstrap implements CommandLineRunner {
     private final RfbEventAttendanceRepository rfbEventAttendanceRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorityRepository authorityRepository;
 
     public RfbBootstrap(RfbLocationRepository rfbLocationRepository, RfbEventRepository rfbEventRepository,
                         RfbEventAttendanceRepository rfbEventAttendanceRepository, UserRepository userRepository,
-                        PasswordEncoder passwordEncoder) {
+                        PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.rfbLocationRepository = rfbLocationRepository;
         this.rfbEventRepository = rfbEventRepository;
         this.rfbEventAttendanceRepository = rfbEventAttendanceRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authorityRepository = authorityRepository;
     }
 
     @Transactional
@@ -59,6 +58,8 @@ public class RfbBootstrap implements CommandLineRunner {
         user.setEmail("johnny@runningforbrews.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("admin"));
+        user.addAuthority(authorityRepository.findOne("ROLE_RUNNER"));
+        user.addAuthority(authorityRepository.findOne("ROLE_ORGANIZER"));
         userRepository.save(user);
 
         //load data
@@ -110,7 +111,7 @@ public class RfbBootstrap implements CommandLineRunner {
 
     private RfbEvent getRfbEvent(RfbLocation rfbLocation) {
         RfbEvent rfbEvent = new RfbEvent();
-        rfbEvent.setEventCode(UUID.randomUUID().toString());
+        rfbEvent.setEventCode(RandomStringUtils.randomAlphanumeric(6).toUpperCase());
         rfbEvent.setEventDate(LocalDate.now()); // will not be on assigned day...
         rfbLocation.addRfbEvent(rfbEvent);
         rfbLocationRepository.save(rfbLocation);
