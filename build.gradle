@@ -48,7 +48,6 @@ dependencyManagement {
 defaultTasks 'bootRun'
 
 group = 'org.trinakria.rfbloyalty'
-version = '0.0.1-SNAPSHOT'
 
 description = ''
 
